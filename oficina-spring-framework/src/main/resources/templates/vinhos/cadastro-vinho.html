@@ -47,13 +47,13 @@
 					<ul class="aw-menu__list">
 
 						<li class="aw-menu__item">
-							<a href="cadastro-vinho.html">
+							<a th:href="@{/vinhos/novo}">
 								<i class="fa  fa-fw  fa-plus-square"></i>
 
 								<span>Cadastro vinho</span>
 							</a>
 
-							<a href="lista-vinhos.html">
+							<a th:href="@{/vinhos}">
 								<i class="fa  fa-fw  fa-table"></i>
 
 								<span>Lista vinhos</span>
@@ -88,27 +88,29 @@
 				</div>
 			</div>
 
-			<div class="container-fluid">
-				<div class="alert  alert-success">
-					<i class="fa fa-check-circle"></i>
-
-					<span>Mensagem sucesso!</span>
-				</div>
-
-                <div class="alert  alert-danger  alert-dismissible" role="alert">
-					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-
-					<div>
-						<i class="fa fa-exclamation-circle"></i>
-						
-						<span>Mensagem erro.</span>
-					</div>
-				</div>
-
+			<div class="container-fluid">				
 				<form method="POST" class="form-vertical  js-form-loading"
 					th:object="${vinho}" th:action="@{/vinhos/novo}">
+					<div class="alert  alert-success"
+						th:if="${!#strings.isEmpty(mensagem)}">
+						<i class="fa fa-check-circle"></i>
+	
+						<span th:text="${mensagem}" >Mensagem sucesso!</span>
+					</div>
+					
+	                <div class="alert  alert-danger  alert-dismissible" role="alert"
+	                	th:if="${#fields.hasAnyErrors()}">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+	
+						<div th:each="erro: ${#fields.detailedErrors()}">
+							<i class="fa fa-exclamation-circle"></i>
+							
+							<span th:text="${erro.message}">Mensagem erro.</span>
+						</div>
+					</div>
+									
 					<div class="form-group">
 						<label for="nome">Nome</label>
 

@@ -2,13 +2,17 @@ package com.algaworks.vinhos.controller;
 
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.algaworks.vinhos.model.TipoVinho;
 import com.algaworks.vinhos.model.Vinho;
@@ -40,8 +44,14 @@ public class VinhosController {
 	} 
 	
 	@PostMapping("/novo")
-	public String salvar(Vinho vinho) {
+	public ModelAndView salvar(@Valid Vinho vinho, BindingResult result,
+			RedirectAttributes attributes) {
+		if (result.hasErrors()){
+			return abrirTela(vinho);		
+		}
+			
 		vinhos.save(vinho);
-		return "redirect:/vinhos/novo";
+		attributes.addFlashAttribute("mensagem", "Vinho salvo com sucesso!");;
+		return new ModelAndView("redirect:/vinhos/novo");
 	}
 }
